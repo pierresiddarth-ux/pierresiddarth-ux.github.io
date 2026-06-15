@@ -637,8 +637,9 @@
 
             <!-- Tab 3: Live Commentary -->
             <div id="live-commentary" class="tab-content">
-                <div class="chat-box" id="commentary-box">
-                    <!-- Dynamic updates feed here -->
+                <div style="height: 380px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.05); overflow: hidden; background: rgba(0,0,0,0.25);">
+                    <a class="twitter-timeline" data-theme="dark" data-height="380" href="https://twitter.com/FIFAWorldCup?ref_src=twsrc%5Etfw">Tweets by FIFAWorldCup</a> 
+                    <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
                 </div>
             </div>
         </section>
@@ -688,25 +689,6 @@
         const statusTextElement = document.getElementById("match-status-text");
         const statusLiveDot = document.getElementById("status-live-dot");
         const liveBadge = document.querySelector(".live-badge");
-        const chatBox = document.getElementById("commentary-box");
-
-        // Real-time events list
-        const commentaryEvents = [
-            { min: 0, text: "Welcome to our live coverage of Spain vs Cape Verde Islands in Group H of the 2026 FIFA World Cup! The national anthems are playing, and stadium energy is electric.", author: "System" },
-            { min: 1, text: "KICK-OFF! The referee blows the whistle and Spain starts the game, passing it back through Rodri.", author: "Referee" },
-            { min: 4, text: "Spain controlling possession early. Cape Verde is sitting deep in a compact 4-5-1 formation.", author: "Spain" },
-            { min: 8, text: "Lamine Yamal cuts inside from the right and crosses, but Vozinha catches it cleanly under pressure.", author: "Spain" },
-            { min: 12, text: "CHANCE! Cape Verde breaks on a lightning counter-attack! Mendes slides a pass to Bebé, whose shot goes just wide of Unai Simón's post!", author: "Cape Verde" },
-            { min: 18, text: "Cucurella is fouled on the left flank. Spain wins a free kick in a dangerous cross position.", author: "Referee" },
-            { min: 23, text: "Spain dominates possession (65% to 35%) but Cape Verde's defense remains extremely organized.", author: "System" },
-            { min: 28, text: "Dani Olmo fires a snapshot from 20 yards! It deflects off Costa and goes out for a corner.", author: "Spain" },
-            { min: 35, text: "Bebé attempts a trademark knuckleball free kick from 35 yards out! Unai Simón tips it over the bar for a corner!", author: "Cape Verde" },
-            { min: 42, text: "Nico Williams beats his defender with raw pace, but his low cross is intercepted by Lopes.", author: "Spain" },
-            { min: 45, text: "First half ends. Both teams head down the tunnel with the score tied at 0-0. Spain 0 - 0 Cape Verde.", author: "System" }
-        ];
-
-        let addedEvents = new Set();
-
         function updateLiveState() {
             const now = new Date();
             const diffMs = now - kickoffTime;
@@ -714,13 +696,11 @@
             let displayTime = "00:00";
             let statusText = "Match Loading...";
             let isLive = false;
-            let currentMinute = 0;
 
             if (diffMs >= 0) {
                 isLive = true;
                 const totalSeconds = Math.floor(diffMs / 1000);
                 const totalMinutes = Math.floor(totalSeconds / 60);
-                currentMinute = totalMinutes;
 
                 if (totalMinutes < 45) {
                     // First Half
@@ -766,30 +746,6 @@
                 statusLiveDot.style.display = "none";
                 liveBadge.style.display = "none";
             }
-
-            // Sync Commentary Feed
-            syncCommentary(currentMinute);
-        }
-
-        function syncCommentary(currentMinute) {
-            commentaryEvents.forEach((ev) => {
-                const eventKey = `${ev.min}-${ev.text}`;
-                if (currentMinute >= ev.min && !addedEvents.has(eventKey)) {
-                    addedEvents.add(eventKey);
-                    
-                    const messageDiv = document.createElement("div");
-                    messageDiv.className = "chat-message";
-                    
-                    const timeLabel = ev.min === 0 ? "Pre" : `${ev.min}'`;
-                    messageDiv.innerHTML = `
-                        <span class="chat-time">${timeLabel}</span>
-                        <span class="chat-author">[${ev.author}]</span>
-                        <span class="chat-text">${ev.text}</span>
-                    `;
-                    chatBox.appendChild(messageDiv);
-                    chatBox.scrollTop = chatBox.scrollHeight;
-                }
-            });
         }
 
         // Run immediately and tick every second
