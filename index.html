@@ -180,13 +180,20 @@
             padding: 0 20px;
         }
 
-        /* Live Score Box Styles */
+        /* Interactive Scoreboard with controls */
         .score-container {
             display: flex;
             align-items: center;
             justify-content: center;
-            gap: 12px;
+            gap: 10px;
             margin-bottom: 8px;
+        }
+
+        .score-control {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 4px;
         }
 
         .score-box {
@@ -221,12 +228,48 @@
             color: var(--text-secondary);
         }
 
+        /* Interactive adjust buttons */
+        .score-btn-container {
+            display: flex;
+            gap: 8px;
+            margin-top: 4px;
+        }
+
+        .score-btn {
+            background: rgba(255, 255, 255, 0.08);
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            color: var(--text-color);
+            width: 22px;
+            height: 22px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.8rem;
+            font-weight: bold;
+            cursor: pointer;
+            opacity: 0.4;
+            transition: all 0.2s ease;
+            user-select: none;
+        }
+
+        .score-btn:hover {
+            opacity: 1;
+            background: var(--accent-color);
+            border-color: var(--accent-color);
+        }
+
+        .score-btn.minus-btn:hover {
+            background: #4b5563;
+            border-color: #4b5563;
+        }
+
         .match-clock {
             font-family: var(--font-display);
-            font-size: 1rem;
+            font-size: 1.05rem;
             font-weight: 700;
             background: rgba(255, 255, 255, 0.08);
-            padding: 4px 10px;
+            padding: 4px 12px;
             border-radius: 6px;
             color: var(--text-color);
             letter-spacing: 0.05em;
@@ -468,7 +511,7 @@
             <div class="tournament-badge">
                 🏆 <span>FIFA WORLD CUP GROUP STAGE</span>
             </div>
-            <div class="live-badge">
+            <div class="live-badge" style="display: none;">
                 <span class="live-dot"></span>
                 <span>Live Stream</span>
             </div>
@@ -480,6 +523,11 @@
                 <div class="team">
                     <span class="team-flag" aria-label="Spain Flag">🇪🇸</span>
                     <span class="team-name">Spain</span>
+                    <!-- Manual Score Adjuster (tap/hover) -->
+                    <div class="score-btn-container">
+                        <button class="score-btn" onclick="adjustScore('home', 1)">+</button>
+                        <button class="score-btn minus-btn" onclick="adjustScore('home', -1)">-</button>
+                    </div>
                 </div>
                 
                 <div class="vs-divider">
@@ -488,17 +536,22 @@
                         <div class="score-separator">-</div>
                         <div class="score-box" id="away-score">0</div>
                     </div>
-                    <div class="match-clock" id="match-clock">65:00</div>
+                    <div class="match-clock" id="match-clock">00:00</div>
                 </div>
 
                 <div class="team">
                     <span class="team-flag" aria-label="Cape Verde Flag">🇨🇻</span>
                     <span class="team-name">Cape Verde</span>
+                    <!-- Manual Score Adjuster (tap/hover) -->
+                    <div class="score-btn-container">
+                        <button class="score-btn" onclick="adjustScore('away', 1)">+</button>
+                        <button class="score-btn minus-btn" onclick="adjustScore('away', -1)">-</button>
+                    </div>
                 </div>
             </div>
             <div class="match-time-status">
-                <span class="live-dot"></span>
-                <span id="match-status-text">Second Half - Live Broadcast</span>
+                <span class="live-dot" id="status-live-dot" style="display: none;"></span>
+                <span id="match-status-text">Match Loading...</span>
             </div>
         </div>
 
@@ -527,19 +580,19 @@
                 <div class="info-grid">
                     <div class="info-item">
                         <div class="info-label">Stadium</div>
-                        <div class="info-value">Lusail Stadium</div>
+                        <div class="info-value">Mercedes-Benz Stadium, Atlanta</div>
                     </div>
                     <div class="info-item">
                         <div class="info-label">Group</div>
-                        <div class="info-value">Group B</div>
+                        <div class="info-value">Group H</div>
                     </div>
                     <div class="info-item">
                         <div class="info-label">Weather</div>
-                        <div class="info-value">28°C, Clear Night</div>
+                        <div class="info-value">24°C, Indoor Arena</div>
                     </div>
                     <div class="info-item">
                         <div class="info-label">Possession</div>
-                        <div class="info-value" id="stats-possession">Spain 68% - 32% CPV</div>
+                        <div class="info-value" id="stats-possession">Spain 50% - 50% CPV</div>
                     </div>
                 </div>
             </div>
@@ -585,16 +638,7 @@
             <!-- Tab 3: Live Commentary -->
             <div id="live-commentary" class="tab-content">
                 <div class="chat-box" id="commentary-box">
-                    <div class="chat-message">
-                        <span class="chat-time">00'</span>
-                        <span class="chat-author">[System]</span>
-                        <span class="chat-text">Welcome to the Live Match Hub. Broadcast setup completed.</span>
-                    </div>
-                    <div class="chat-message">
-                        <span class="chat-time">45'</span>
-                        <span class="chat-author">[System]</span>
-                        <span class="chat-text">The second half starts. Scores are locked at 0-0.</span>
-                    </div>
+                    <!-- Dynamic updates feed here -->
                 </div>
             </div>
         </section>
@@ -605,7 +649,7 @@
         <p>© 2026 World Cup Live Hub. All rights reserved.</p>
     </footer>
 
-    <!-- Tab Switching, Clock and Live Event Engine -->
+    <!-- Clock, Scoring, and Event Engine -->
     <script>
         function openTab(evt, tabId) {
             const tabContents = document.getElementsByClassName("tab-content");
@@ -622,114 +666,135 @@
             evt.currentTarget.classList.add("active");
         }
 
-        // Match Clock Variables
-        let minute = 65;
-        let second = 0;
+        // Live Scoring manual adjustment
+        function adjustScore(team, val) {
+            const scoreId = team === 'home' ? 'home-score' : 'away-score';
+            const element = document.getElementById(scoreId);
+            let score = parseInt(element.innerText) || 0;
+            score = Math.max(0, score + val);
+            element.innerText = score;
+            
+            // Trigger visual feedback
+            element.classList.add("goal-flash");
+            setTimeout(() => {
+                element.classList.remove("goal-flash");
+            }, 1000);
+        }
+
+        // Real-world Kickoff time: June 15, 2026 at 16:00:00 UTC (21:30 IST)
+        const kickoffTime = new Date(Date.UTC(2026, 5, 15, 16, 0, 0));
+        
         const clockElement = document.getElementById("match-clock");
-        const homeScoreElement = document.getElementById("home-score");
-        const awayScoreElement = document.getElementById("away-score");
+        const statusTextElement = document.getElementById("match-status-text");
+        const statusLiveDot = document.getElementById("status-live-dot");
+        const liveBadge = document.querySelector(".live-badge");
         const chatBox = document.getElementById("commentary-box");
 
-        // Live Clock ticking
-        function updateClock() {
-            if (minute >= 90 && second >= 0) {
-                clockElement.innerText = "90:00+";
-                return;
-            }
-            
-            second++;
-            if (second >= 60) {
-                second = 0;
-                minute++;
-            }
-
-            const formattedMin = minute < 10 ? '0' + minute : minute;
-            const formattedSec = second < 10 ? '0' + second : second;
-            clockElement.innerText = `${formattedMin}:${formattedSec}`;
-            
-            // Check for match events
-            triggerEvents(minute, second);
-        }
-
-        setInterval(updateClock, 1000); // 1 real second = 1 game second (for testing, let's keep it ticking normally. Or we can accelerate it! Let's make it tick every 100ms so the game progresses quickly!)
-
-        // Let's accelerate the match slightly so the user sees the live scores change! 
-        // 1 real second = 15 game seconds.
-        let timeSpeed = 15; 
-        clearInterval(updateClock);
-        
-        function updateClockAccelerated() {
-            if (minute >= 94) {
-                clockElement.innerText = "FT";
-                document.getElementById("match-status-text").innerText = "Full Time - Match Ended";
-                return;
-            }
-
-            second += timeSpeed;
-            if (second >= 60) {
-                minute += Math.floor(second / 60);
-                second = second % 60;
-            }
-
-            if (minute >= 90) {
-                const extraTime = minute - 90;
-                clockElement.innerText = `90+${extraTime}`;
-            } else {
-                const formattedMin = minute < 10 ? '0' + minute : minute;
-                const formattedSec = second < 10 ? '0' + second : second;
-                clockElement.innerText = `${formattedMin}:${formattedSec}`;
-            }
-            
-            triggerEvents(minute, second);
-        }
-        setInterval(updateClockAccelerated, 1000); // Clock ticks every 1 second, jumping by 15 game seconds
-
-        // Event schedule
-        const events = [
-            { triggerMin: 68, triggered: false, text: "🔄 Spain Substitution: Dani Olmo out, Pedri in.", author: "Spain", action: null },
-            { triggerMin: 72, triggered: false, text: "🔥 Great build-up play! Lamine Yamal cuts inside onto his left foot...", author: "Spain", action: null },
-            { triggerMin: 73, triggered: false, text: "⚽ GOOOOOAL!!! Spain 1, Cape Verde 0! Lamine Yamal curls a sensational shot into the top corner! Unbelievable goal!", author: "Spain", action: 'goal_home' },
-            { triggerMin: 79, triggered: false, text: "🟨 Yellow Card: Logan Costa (Cape Verde) gets booked for a sliding tackle from behind on Nico Williams.", author: "Referee", action: null },
-            { triggerMin: 84, triggered: false, text: "🔄 Cape Verde Substitution: Ryan Mendes out, Gilson Tavares in.", author: "Cape Verde", action: null },
-            { triggerMin: 89, triggered: false, text: "🧤 What a save! Vozinha flies to his right to block a rocket shot from Álvaro Morata!", author: "Cape Verde", action: null },
-            { triggerMin: 90, triggered: false, text: "📋 4 Minutes of Added Time announced by the fourth official.", author: "System", action: null },
-            { triggerMin: 93, triggered: false, text: "🛡️ Spain is keeping possession, playing defensively to seal the victory.", author: "Spain", action: null },
-            { triggerMin: 94, triggered: false, text: "🏁 FULL TIME! Spain secures a narrow 1-0 victory over Cape Verde in a thrilling World Cup matchup!", author: "System", action: 'full_time' }
+        // Real-time events list
+        const commentaryEvents = [
+            { min: 0, text: "Welcome to our live coverage of Spain vs Cape Verde Islands in Group H of the 2026 FIFA World Cup! The national anthems are playing, and stadium energy is electric.", author: "System" },
+            { min: 1, text: "KICK-OFF! The referee blows the whistle and Spain starts the game, passing it back through Rodri.", author: "Referee" },
+            { min: 4, text: "Spain controlling possession early. Cape Verde is sitting deep in a compact 4-5-1 formation.", author: "Spain" },
+            { min: 8, text: "Lamine Yamal cuts inside from the right and crosses, but Vozinha catches it cleanly under pressure.", author: "Spain" },
+            { min: 12, text: "CHANCE! Cape Verde breaks on a lightning counter-attack! Mendes slides a pass to Bebé, whose shot goes just wide of Unai Simón's post!", author: "Cape Verde" },
+            { min: 18, text: "Cucurella is fouled on the left flank. Spain wins a free kick in a dangerous cross position.", author: "Referee" },
+            { min: 23, text: "Spain dominates possession (65% to 35%) but Cape Verde's defense remains extremely organized.", author: "System" },
+            { min: 28, text: "Dani Olmo fires a snapshot from 20 yards! It deflects off Costa and goes out for a corner.", author: "Spain" },
+            { min: 35, text: "Bebé attempts a trademark knuckleball free kick from 35 yards out! Unai Simón tips it over the bar for a corner!", author: "Cape Verde" },
+            { min: 42, text: "Nico Williams beats his defender with raw pace, but his low cross is intercepted by Lopes.", author: "Spain" },
+            { min: 45, text: "First half ends. Both teams head down the tunnel with the score tied at 0-0. Spain 0 - 0 Cape Verde.", author: "System" }
         ];
 
-        function triggerEvents(currentMin, currentSec) {
-            events.forEach(event => {
-                if (currentMin >= event.triggerMin && !event.triggered) {
-                    event.triggered = true;
+        let addedEvents = new Set();
+
+        function updateLiveState() {
+            const now = new Date();
+            const diffMs = now - kickoffTime;
+            
+            let displayTime = "00:00";
+            let statusText = "Match Loading...";
+            let isLive = false;
+            let currentMinute = 0;
+
+            if (diffMs >= 0) {
+                isLive = true;
+                const totalSeconds = Math.floor(diffMs / 1000);
+                const totalMinutes = Math.floor(totalSeconds / 60);
+                currentMinute = totalMinutes;
+
+                if (totalMinutes < 45) {
+                    // First Half
+                    const displayMin = totalMinutes.toString().padStart(2, '0');
+                    const displaySec = (totalSeconds % 60).toString().padStart(2, '0');
+                    displayTime = `${displayMin}:${displaySec}`;
+                    statusText = "First Half - Live Broadcast";
+                } else if (totalMinutes >= 45 && totalMinutes < 60) {
+                    // Half Time
+                    displayTime = "HT";
+                    statusText = "Half Time";
+                } else if (totalMinutes >= 60 && totalMinutes < 105) {
+                    // Second Half (Starts at 60 mins from kickoff, representing 45' game time)
+                    const gameMin = 45 + (totalMinutes - 60);
+                    const displayMin = gameMin.toString().padStart(2, '0');
+                    const displaySec = (totalSeconds % 60).toString().padStart(2, '0');
+                    displayTime = `${displayMin}:${displaySec}`;
+                    statusText = "Second Half - Live Broadcast";
+                } else {
+                    // Full Time
+                    displayTime = "FT";
+                    statusText = "Full Time - Match Ended";
+                    isLive = false;
+                }
+            } else {
+                // Match not started yet (countdown)
+                const absDiff = Math.abs(diffMs);
+                const hours = Math.floor(absDiff / (3600 * 1000));
+                const mins = Math.floor((absDiff % (3600 * 1000)) / (60 * 1000));
+                const secs = Math.floor((absDiff % (60 * 1000)) / 1000);
+                displayTime = `-${hours.toString().padStart(2, '0')}:${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
+                statusText = "Match Starts Soon";
+            }
+
+            // Update Scoreboard Elements
+            clockElement.innerText = displayTime;
+            statusTextElement.innerText = statusText;
+            
+            if (isLive) {
+                statusLiveDot.style.display = "inline-block";
+                liveBadge.style.display = "inline-flex";
+            } else {
+                statusLiveDot.style.display = "none";
+                liveBadge.style.display = "none";
+            }
+
+            // Sync Commentary Feed
+            syncCommentary(currentMinute);
+        }
+
+        function syncCommentary(currentMinute) {
+            commentaryEvents.forEach((ev) => {
+                const eventKey = `${ev.min}-${ev.text}`;
+                if (currentMinute >= ev.min && !addedEvents.has(eventKey)) {
+                    addedEvents.add(eventKey);
                     
-                    // Add commentary message
                     const messageDiv = document.createElement("div");
                     messageDiv.className = "chat-message";
+                    
+                    const timeLabel = ev.min === 0 ? "Pre" : `${ev.min}'`;
                     messageDiv.innerHTML = `
-                        <span class="chat-time">${event.triggerMin}'</span>
-                        <span class="chat-author">[${event.author}]</span>
-                        <span class="chat-text">${event.text}</span>
+                        <span class="chat-time">${timeLabel}</span>
+                        <span class="chat-author">[${ev.author}]</span>
+                        <span class="chat-text">${ev.text}</span>
                     `;
                     chatBox.appendChild(messageDiv);
                     chatBox.scrollTop = chatBox.scrollHeight;
-
-                    // Handle Actions
-                    if (event.action === 'goal_home') {
-                        // Flash goal animation on score board
-                        homeScoreElement.innerText = "1";
-                        homeScoreElement.classList.add("goal-flash");
-                        setTimeout(() => {
-                            homeScoreElement.classList.remove("goal-flash");
-                        }, 6000);
-                        
-                        // Update stats possession slightly
-                        document.getElementById("stats-possession").innerText = "Spain 71% - 29% CPV";
-                    } else if (event.action === 'full_time') {
-                        document.getElementById("match-status-text").innerText = "Full Time - Spain Wins";
-                    }
                 }
             });
         }
+
+        // Run immediately and tick every second
+        updateLiveState();
+        setInterval(updateLiveState, 1000);
     </script>
 </body>
 </html>
