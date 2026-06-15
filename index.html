@@ -523,11 +523,6 @@
                 <div class="team">
                     <span class="team-flag" aria-label="Spain Flag">🇪🇸</span>
                     <span class="team-name">Spain</span>
-                    <!-- Manual Score Adjuster (tap/hover) -->
-                    <div class="score-btn-container">
-                        <button class="score-btn" onclick="adjustScore('home', 1)">+</button>
-                        <button class="score-btn minus-btn" onclick="adjustScore('home', -1)">-</button>
-                    </div>
                 </div>
                 
                 <div class="vs-divider">
@@ -542,11 +537,6 @@
                 <div class="team">
                     <span class="team-flag" aria-label="Cape Verde Flag">🇨🇻</span>
                     <span class="team-name">Cape Verde</span>
-                    <!-- Manual Score Adjuster (tap/hover) -->
-                    <div class="score-btn-container">
-                        <button class="score-btn" onclick="adjustScore('away', 1)">+</button>
-                        <button class="score-btn minus-btn" onclick="adjustScore('away', -1)">-</button>
-                    </div>
                 </div>
             </div>
             <div class="match-time-status">
@@ -667,20 +657,79 @@
             evt.currentTarget.classList.add("active");
         }
 
-        // Live Scoring manual adjustment
-        function adjustScore(team, val) {
-            const scoreId = team === 'home' ? 'home-score' : 'away-score';
-            const element = document.getElementById(scoreId);
-            let score = parseInt(element.innerText) || 0;
-            score = Math.max(0, score + val);
-            element.innerText = score;
-            
-            // Trigger visual feedback
-            element.classList.add("goal-flash");
-            setTimeout(() => {
-                element.classList.remove("goal-flash");
-            }, 1000);
+        // Live Scoring via Online Data (SofaScore CORS parsing)
+        let currentHomeScore = 0;
+        let currentAwayScore = 0;
+
+        async function fetchLiveScore() {
+            const targetUrl = 'https://www.sofascore.com/spain-cabo-verde/UdbscUdb';
+            const proxies = [
+                url => `https://api.allorigins.win/get?url=${encodeURIComponent(url)}`,
+                url => `https://api.codetabs.com/v1/proxy?quest=${encodeURIComponent(url)}`
+            ];
+
+            for (let i = 0; i < proxies.length; i++) {
+                try {
+                    const proxyUrl = proxies[i](targetUrl);
+                    const response = await fetch(proxyUrl);
+                    if (!response.ok) continue;
+
+                    let htmlText = "";
+                    if (i === 0) {
+                        const json = await response.json();
+                        htmlText = json.contents;
+                    } else {
+                        htmlText = await response.text();
+                    }
+
+                    if (!htmlText) continue;
+
+                    const parser = new DOMParser();
+                    const doc = parser.parseFromString(htmlText, 'text/html');
+                    const nextDataScript = doc.getElementById('__NEXT_DATA__');
+
+                    if (nextDataScript) {
+                        const jsonData = JSON.parse(nextDataScript.textContent);
+                        const event = jsonData.props.pageProps.event;
+                        
+                        if (event) {
+                            const newHomeScore = event.homeScore && event.homeScore.display !== undefined ? event.homeScore.display : 0;
+                            const newAwayScore = event.awayScore && event.awayScore.display !== undefined ? event.awayScore.display : 0;
+                            
+                            const homeScoreEl = document.getElementById('home-score');
+                            const awayScoreEl = document.getElementById('away-score');
+
+                            if (newHomeScore !== currentHomeScore) {
+                                currentHomeScore = newHomeScore;
+                                homeScoreEl.innerText = newHomeScore;
+                                homeScoreEl.classList.add("goal-flash");
+                                setTimeout(() => homeScoreEl.classList.remove("goal-flash"), 5000);
+                            } else {
+                                homeScoreEl.innerText = newHomeScore;
+                            }
+
+                            if (newAwayScore !== currentAwayScore) {
+                                currentAwayScore = newAwayScore;
+                                awayScoreEl.innerText = newAwayScore;
+                                awayScoreEl.classList.add("goal-flash");
+                                setTimeout(() => awayScoreEl.classList.remove("goal-flash"), 5000);
+                            } else {
+                                awayScoreEl.innerText = newAwayScore;
+                            }
+                            
+                            console.log(`Live score updated: Spain ${newHomeScore} - ${newAwayScore} Cape Verde`);
+                            break; // Successfully updated
+                        }
+                    }
+                } catch (e) {
+                    console.warn(`Proxy ${i} failed:`, e);
+                }
+            }
         }
+
+        // Call immediately and poll every 30 seconds
+        fetchLiveScore();
+        setInterval(fetchLiveScore, 30000);
 
         // Real-world Kickoff time: June 15, 2026 at 16:00:00 UTC (21:30 IST)
         const kickoffTime = new Date(Date.UTC(2026, 5, 15, 16, 0, 0));
