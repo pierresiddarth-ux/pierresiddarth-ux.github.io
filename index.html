@@ -747,6 +747,7 @@
         async function fetchLiveScore() {
             const targetUrl = 'https://www.sofascore.com/spain-cabo-verde/UdbscUdb';
             const proxies = [
+                url => `https://corsproxy.io/?${encodeURIComponent(url)}`,
                 url => `https://api.allorigins.win/get?url=${encodeURIComponent(url)}`,
                 url => `https://api.codetabs.com/v1/proxy?quest=${encodeURIComponent(url)}`
             ];
@@ -758,10 +759,10 @@
                     if (!response.ok) continue;
 
                     let htmlText = "";
-                    if (i === 0) {
+                    if (i === 1) { // Index 1 is allorigins, which returns a JSON wrapper
                         const json = await response.json();
                         htmlText = json.contents;
-                    } else {
+                    } else { // Index 0 and 2 are raw text proxies
                         htmlText = await response.text();
                     }
 
