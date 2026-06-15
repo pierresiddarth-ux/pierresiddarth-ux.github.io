@@ -273,6 +273,13 @@
             border-radius: 6px;
             color: var(--text-color);
             letter-spacing: 0.05em;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .match-clock:hover {
+            background: rgba(255, 255, 255, 0.2);
+            color: #fbbf24; /* Gold on hover */
         }
 
         .match-time-status {
@@ -674,6 +681,35 @@
         const statusLiveDot = document.getElementById("status-live-dot");
         const liveBadge = document.querySelector(".live-badge");
 
+        // Click on clock to manually adjust match time if needed
+        clockElement.addEventListener('click', () => {
+            const userMin = prompt("Enter current match minute (e.g. 62) to sync the clock, or type 'reset' to go back to auto sync:");
+            if (userMin !== null) {
+                const trimmed = userMin.trim().toLowerCase();
+                if (trimmed === 'reset' || trimmed === '') {
+                    localStorage.removeItem('override_period_start');
+                    localStorage.removeItem('override_period_type');
+                    livePeriodStart = 0;
+                    if (timerInterval) clearInterval(timerInterval);
+                    fetchLiveScore();
+                    alert("Clock reset to automatic sync.");
+                    return;
+                }
+                const parsedMin = parseInt(userMin);
+                if (!isNaN(parsedMin) && parsedMin >= 0) {
+                    const nowSec = Math.floor(Date.now() / 1000);
+                    const isSecondHalf = parsedMin >= 45;
+                    const elapsedMinsInPeriod = isSecondHalf ? (parsedMin - 45) : parsedMin;
+                    const periodStartSec = nowSec - (elapsedMinsInPeriod * 60);
+                    
+                    localStorage.setItem('override_period_start', periodStartSec.toString());
+                    localStorage.setItem('override_period_type', isSecondHalf ? '2nd' : '1st');
+                    
+                    startTimer(periodStartSec, isSecondHalf ? '2nd' : '1st');
+                }
+            }
+        });
+
         function startTimer(startTimestamp, type) {
             if (timerInterval) clearInterval(timerInterval);
             livePeriodStart = startTimestamp;
@@ -775,24 +811,31 @@
                                 statusLiveDot.style.display = "inline-block";
                                 liveBadge.style.display = "inline-flex";
 
-                                const currentPeriodStart = event.time ? event.time.currentPeriodStartTimestamp : null;
-                                
-                                if (currentPeriodStart) {
-                                    const type = (descLower.includes("2nd") || descLower.includes("second")) ? "2nd" : "1st";
-                                    startTimer(currentPeriodStart, type);
-                                } else if (event.time && event.time.played) {
-                                    if (timerInterval) clearInterval(timerInterval);
-                                    clockElement.innerText = `${event.time.played}'`;
+                                // Only apply API clock if user hasn't set a manual override
+                                if (!localStorage.getItem('override_period_start')) {
+                                    const currentPeriodStart = event.time ? event.time.currentPeriodStartTimestamp : null;
+                                    
+                                    if (currentPeriodStart) {
+                                        const type = (descLower.includes("2nd") || descLower.includes("second")) ? "2nd" : "1st";
+                                        startTimer(currentPeriodStart, type);
+                                    } else if (event.time && event.time.played) {
+                                        if (timerInterval) clearInterval(timerInterval);
+                                        clockElement.innerText = `${event.time.played}'`;
+                                    }
                                 }
                             } else if (descLower.includes("half") && descLower.includes("time") || descLower.includes("ht")) {
-                                if (timerInterval) clearInterval(timerInterval);
-                                clockElement.innerText = "HT";
+                                if (!localStorage.getItem('override_period_start')) {
+                                    if (timerInterval) clearInterval(timerInterval);
+                                    clockElement.innerText = "HT";
+                                }
                                 statusTextElement.innerText = "Half Time";
                                 statusLiveDot.style.display = "inline-block";
                                 liveBadge.style.display = "inline-flex";
                             } else if (statusType === "finished" || descLower.includes("ended") || descLower.includes("ft")) {
-                                if (timerInterval) clearInterval(timerInterval);
-                                clockElement.innerText = "FT";
+                                if (!localStorage.getItem('override_period_start')) {
+                                    if (timerInterval) clearInterval(timerInterval);
+                                    clockElement.innerText = "FT";
+                                }
                                 statusTextElement.innerText = "Full Time - Match Ended";
                                 statusLiveDot.style.display = "none";
                                 liveBadge.style.display = "none";
@@ -868,8 +911,18 @@
             }
         }
 
-        // Run immediately and poll every 30 seconds
-        fetchLiveScore();
+        // On page load: check for manual override first, otherwise poll API
+        const overrideStart = localStorage.getItem('override_period_start');
+        const overrideType = localStorage.getItem('override_period_type');
+        if (overrideStart && overrideType) {
+            startTimer(parseInt(overrideStart), overrideType);
+            // Still poll scores in background
+            fetchLiveScore();
+        } else {
+            fetchLiveScore();
+        }
+        
+        // Poll API every 30 seconds
         setInterval(fetchLiveScore, 30000);
 
         // Fallback clock tick (run every second to keep the clock ticking)
