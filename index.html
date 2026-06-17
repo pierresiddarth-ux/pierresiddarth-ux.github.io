@@ -760,7 +760,7 @@
         <div class="matchup-card" id="scoreboard-card" style="position: relative;">
             
             <!-- Settings Toggle Button (Gear icon) -->
-            <button class="settings-toggle-btn" onclick="toggleSettings()" title="Sync Scoreboard with Live Stream">
+            <button class="settings-toggle-btn" onclick="toggleSettings()" title="Sync Match Clock with Live Stream">
                 ⚙️ Settings
             </button>
 
@@ -768,26 +768,9 @@
             <div id="settings-drawer" class="settings-drawer">
                 <div class="settings-drawer-header">
                     <h4>Stream Sync Settings</h4>
-                    <span class="settings-help">Delay or adjust the scoreboard to align with your stream delay.</span>
+                    <span class="settings-help">Adjust the match clock to align with your stream delay.</span>
                 </div>
                 <div class="settings-grid">
-                    <!-- Score Control -->
-                    <div class="setting-item">
-                        <label>Portugal Goals</label>
-                        <div class="adjust-control">
-                            <button class="adjust-btn" onclick="adjustGoals('home', -1)">-</button>
-                            <span id="settings-score-home" class="settings-value">0</span>
-                            <button class="adjust-btn" onclick="adjustGoals('home', 1)">+</button>
-                        </div>
-                    </div>
-                    <div class="setting-item">
-                        <label>DR Congo Goals</label>
-                        <div class="adjust-control">
-                            <button class="adjust-btn" onclick="adjustGoals('away', -1)">-</button>
-                            <span id="settings-score-away" class="settings-value">0</span>
-                            <button class="adjust-btn" onclick="adjustGoals('away', 1)">+</button>
-                        </div>
-                    </div>
                     <!-- Clock Control -->
                     <div class="setting-item">
                         <label>Match Clock (Min)</label>
@@ -823,12 +806,7 @@
                     <span class="team-name">Portugal</span>
                 </div>
                 <div class="vs-divider">
-                    <div class="score-container">
-                        <div class="score-box" id="score-home">0</div>
-                        <div class="score-separator">:</div>
-                        <div class="score-box" id="score-away">0</div>
-                    </div>
-                    <div class="match-clock" id="match-clock-display" onclick="toggleSettings()" title="Click to sync match time">00:00</div>
+                    <div class="match-clock" id="match-clock-display" onclick="toggleSettings()" title="Click to sync match time" style="font-size: 1.8rem; padding: 6px 16px; margin-bottom: 6px;">00:00</div>
                     <div class="match-time-status" id="match-status-display">
                         <span class="live-dot" id="live-dot-indicator"></span>
                         <span id="status-text">LIVE</span>
@@ -849,6 +827,7 @@
                 <option value="player2">Player 2 (Backup 1)</option>
                 <option value="player3">Player 3 (Backup 2)</option>
                 <option value="player4">Player 4 (Backup 3)</option>
+                <option value="player5">Player 5 (Backup 4)</option>
             </select>
         </div>
 
@@ -864,7 +843,6 @@
             <nav class="tabs-header">
                 <button class="tab-btn active" onclick="openTab(event, 'match-info')">Match Details</button>
                 <button class="tab-btn" onclick="openTab(event, 'lineups')">Starting Lineups</button>
-                <button class="tab-btn" onclick="openTab(event, 'live-commentary')">Live Commentary</button>
             </nav>
 
             <!-- Tab 1: Match Info -->
@@ -881,10 +859,6 @@
                     <div class="info-item">
                         <div class="info-label">Weather</div>
                         <div class="info-value">26°C, Retractable Roof</div>
-                    </div>
-                    <div class="info-item">
-                        <div class="info-label">Possession</div>
-                        <div class="info-value" id="stats-possession">Portugal 62% - 38% DRC</div>
                     </div>
                 </div>
             </div>
@@ -926,20 +900,12 @@
                     </div>
                 </div>
             </div>
-
-            <!-- Tab 3: Live Commentary -->
-            <div id="live-commentary" class="tab-content">
-                <div style="height: 380px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.05); overflow: hidden; background: rgba(0,0,0,0.25);">
-                    <a class="twitter-timeline" data-theme="dark" data-height="380" href="https://twitter.com/FIFAWorldCup?ref_src=twsrc%5Etfw">Tweets by FIFAWorldCup</a> 
-                    <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
-                </div>
-            </div>
         </section>
 
     </div>
 
     <footer class="site-footer">
-        <p>© 2026 World Cup Live Hub. All rights reserved. <span class="version-badge">Build v1.6.0 (Multi-Server Player Selection)</span></p>
+        <p>© 2026 World Cup Live Hub. All rights reserved. <span class="version-badge">Build v1.8.0 (Live Timer & Teams Display)</span></p>
     </footer>
 
     <!-- Scripts -->
@@ -965,7 +931,8 @@
             player1: "https://ntv.cx/embed?t=K1NHTWlwOHVzd3J0OEZ6NVViUklpbG4ySjFWVTA0TnA2QlpjNFFja3AxYmNKbGtBUjRFSDFWV1JmaGJHaktTTURNVWZoRkczTUtPV1Z6V01HRERyemc9PQ~~",
             player2: "https://ntv.cx/embed?t=K1NHTWlwOHVzd3J0OEZ6NVViUklpbG4ySjFWVTA0TnA2QlpjNFFja3AxYmNKbGtBUjRFSDFWV1JmaGJHaktTTS9OMURDUThCWC82eEI2ckQ2R3NNeEE9PQ~~",
             player3: "https://ntv.cx/embed?t=U3kvVGsxU1RSbFNVNzYraHQ0eDVFWktGeGVzQkNwSHdpdVRML1F2aWtWTG9xWmtIMHdldGFoYXhTYk5YNFVzdHoySW1vQ1ozV0JQa0x1UUx0VnRhQWc9PQ~~",
-            player4: "https://ntv.cx/embed?t=U3kvVGsxU1RSbFNVNzYraHQ0eDVFWktGeGVzQkNwSHdpdVRML1F2aWtWTG9xWmtIMHdldGFoYXhTYk5YNFVzdHoySW1vQ1ozV0JQa0x1UUx0VnRhQWc9PQ~~"
+            player4: "https://ntv.cx/embed?t=U3kvVGsxU1RSbFNVNzYraHQ0eDVFWktGeGVzQkNwSHdpdVRML1F2aWtWTG9xWmtIMHdldGFoYXhTYk5YNFVzdHoySW1vQ1ozV0JQa0x1UUx0VnRhQWc9PQ~~",
+            player5: "https://embed.st/embed/admin/ppv-portugal-vs-congo-dr/5"
         };
 
         function changePlayer(playerKey) {
@@ -981,21 +948,14 @@
         let isClockRunning = true;
         let clockInterval = null;
         let lastSavedTime = Date.now();
-        let homeScore = 0;
-        let awayScore = 0;
         let matchStatus = "LIVE";
 
         // DOM elements
-        let scoreHomeEl, scoreAwayEl, settingsHomeEl, settingsAwayEl;
         let clockDisplayEl, timeInputEl, statusDisplayEl, liveDotEl, statusSelectEl, playBtnEl;
 
         // Load State from LocalStorage
         function loadState() {
             // Bind DOM elements
-            scoreHomeEl = document.getElementById("score-home");
-            scoreAwayEl = document.getElementById("score-away");
-            settingsHomeEl = document.getElementById("settings-score-home");
-            settingsAwayEl = document.getElementById("settings-score-away");
             clockDisplayEl = document.getElementById("match-clock-display");
             timeInputEl = document.getElementById("settings-time-input");
             statusDisplayEl = document.getElementById("status-text");
@@ -1003,8 +963,6 @@
             statusSelectEl = document.getElementById("settings-status-select");
             playBtnEl = document.getElementById("clock-play-btn");
 
-            homeScore = parseInt(localStorage.getItem("scoreboard_homeScore")) || 0;
-            awayScore = parseInt(localStorage.getItem("scoreboard_awayScore")) || 0;
             matchSeconds = parseInt(localStorage.getItem("scoreboard_matchSeconds")) || 0;
             matchStatus = localStorage.getItem("scoreboard_matchStatus") || "LIVE";
             isClockRunning = localStorage.getItem("scoreboard_isClockRunning") !== "false"; // default true
@@ -1016,7 +974,6 @@
                 matchSeconds += Math.floor(elapsedMs / 1000);
             }
 
-            updateScoreDisplay();
             updateClockDisplay();
             updateStatusDisplay();
 
@@ -1043,30 +1000,10 @@
 
         // Save State to LocalStorage
         function saveState() {
-            localStorage.setItem("scoreboard_homeScore", homeScore);
-            localStorage.setItem("scoreboard_awayScore", awayScore);
             localStorage.setItem("scoreboard_matchSeconds", matchSeconds);
             localStorage.setItem("scoreboard_matchStatus", matchStatus);
             localStorage.setItem("scoreboard_isClockRunning", isClockRunning);
             localStorage.setItem("scoreboard_lastSavedTime", Date.now());
-        }
-
-        // Score Controls
-        function adjustGoals(team, diff) {
-            if (team === 'home') {
-                homeScore = Math.max(0, homeScore + diff);
-            } else if (team === 'away') {
-                awayScore = Math.max(0, awayScore + diff);
-            }
-            updateScoreDisplay();
-            saveState();
-
-            // Trigger visual flash on update
-            const scoreBox = document.getElementById(`score-${team}`);
-            scoreBox.classList.add("goal-flash");
-            setTimeout(() => {
-                scoreBox.classList.remove("goal-flash");
-            }, 1000);
         }
 
         // Settings Modal Toggle
@@ -1078,8 +1015,6 @@
                 drawer.style.display = "block";
                 // Update settings form with current state
                 timeInputEl.value = Math.floor(matchSeconds / 60);
-                settingsHomeEl.textContent = homeScore;
-                settingsAwayEl.textContent = awayScore;
             }
         }
 
@@ -1171,3 +1106,4 @@
     </script>
 </body>
 </html>
+
