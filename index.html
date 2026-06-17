@@ -696,6 +696,49 @@
         .close-settings-btn:hover {
             background: #059669;
         }
+
+        /* Player Server Selection Dropdown */
+        .player-select-container {
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+            gap: 10px;
+            margin-bottom: 12px;
+            padding: 8px 16px;
+            background: rgba(13, 20, 38, 0.5);
+            backdrop-filter: blur(12px);
+            border: 1px solid var(--card-border);
+            border-radius: 12px;
+        }
+
+        .player-select-label {
+            font-family: var(--font-display);
+            font-size: 0.9rem;
+            font-weight: 700;
+            color: #fbbf24;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .player-select-dropdown {
+            background: rgba(0, 0, 0, 0.4);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            color: var(--text-color);
+            padding: 6px 12px;
+            border-radius: 8px;
+            font-family: var(--font-body);
+            font-size: 0.9rem;
+            font-weight: 600;
+            outline: none;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .player-select-dropdown:hover {
+            border-color: #fbbf24;
+            color: #fbbf24;
+        }
     </style>
 </head>
 <body>
@@ -798,10 +841,21 @@
             </div>
         </div>
 
+        <!-- Player Server Selection Dropdown -->
+        <div class="player-select-container">
+            <span class="player-select-label">📺 Server Select:</span>
+            <select id="player-select" class="player-select-dropdown" onchange="changePlayer(this.value)">
+                <option value="player1">Player 1 (Main)</option>
+                <option value="player2">Player 2 (Backup 1)</option>
+                <option value="player3">Player 3 (Backup 2)</option>
+                <option value="player4">Player 4 (Backup 3)</option>
+            </select>
+        </div>
+
         <!-- Video Player -->
         <main class="stream-section">
             <div class="video-wrapper">
-                <iframe src="https://ntv.cx/embed?t=U3kvVGsxU1RSbFNVNzYraHQ0eDVFWktGeGVzQkNwSHdpdVRML1F2aWtWTG9xWmtIMHdldGFoYXhTYk5YNFVzdHoySW1vQ1ozV0JQa0x1UUx0VnRhQWc9PQ~~" width="100%" height="450" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                <iframe id="stream-iframe" src="https://ntv.cx/embed?t=K1NHTWlwOHVzd3J0OEZ6NVViUklpbG4ySjFWVTA0TnA2QlpjNFFja3AxYmNKbGtBUjRFSDFWV1JmaGJHaktTTURNVWZoRkczTUtPV1Z6V01HRERyemc9PQ~~" width="100%" height="450" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
             </div>
         </main>
 
@@ -885,7 +939,7 @@
     </div>
 
     <footer class="site-footer">
-        <p>© 2026 World Cup Live Hub. All rights reserved. <span class="version-badge">Build v1.5.2 (Player Restored)</span></p>
+        <p>© 2026 World Cup Live Hub. All rights reserved. <span class="version-badge">Build v1.6.0 (Multi-Server Player Selection)</span></p>
     </footer>
 
     <!-- Scripts -->
@@ -904,6 +958,22 @@
 
             document.getElementById(tabId).classList.add("active");
             evt.currentTarget.classList.add("active");
+        }
+
+        // --- Player Sources mapping ---
+        const playerSources = {
+            player1: "https://ntv.cx/embed?t=K1NHTWlwOHVzd3J0OEZ6NVViUklpbG4ySjFWVTA0TnA2QlpjNFFja3AxYmNKbGtBUjRFSDFWV1JmaGJHaktTTURNVWZoRkczTUtPV1Z6V01HRERyemc9PQ~~",
+            player2: "https://ntv.cx/embed?t=K1NHTWlwOHVzd3J0OEZ6NVViUklpbG4ySjFWVTA0TnA2QlpjNFFja3AxYmNKbGtBUjRFSDFWV1JmaGJHaktTTS9OMURDUThCWC82eEI2ckQ2R3NNeEE9PQ~~",
+            player3: "https://ntv.cx/embed?t=U3kvVGsxU1RSbFNVNzYraHQ0eDVFWktGeGVzQkNwSHdpdVRML1F2aWtWTG9xWmtIMHdldGFoYXhTYk5YNFVzdHoySW1vQ1ozV0JQa0x1UUx0VnRhQWc9PQ~~",
+            player4: "https://ntv.cx/embed?t=U3kvVGsxU1RSbFNVNzYraHQ0eDVFWktGeGVzQkNwSHdpdVRML1F2aWtWTG9xWmtIMHdldGFoYXhTYk5YNFVzdHoySW1vQ1ozV0JQa0x1UUx0VnRhQWc9PQ~~"
+        };
+
+        function changePlayer(playerKey) {
+            const iframe = document.getElementById("stream-iframe");
+            if (iframe && playerSources[playerKey]) {
+                iframe.src = playerSources[playerKey];
+                localStorage.setItem("selectedPlayer", playerKey);
+            }
         }
 
         // --- Custom Scoreboard & Stream Sync State ---
@@ -954,6 +1024,17 @@
             timeInputEl.value = Math.floor(matchSeconds / 60);
             statusSelectEl.value = matchStatus;
             playBtnEl.textContent = isClockRunning ? "Pause" : "Play";
+
+            // Initialize player server selection
+            const savedPlayer = localStorage.getItem("selectedPlayer") || "player1";
+            const playerSelect = document.getElementById("player-select");
+            if (playerSelect) {
+                playerSelect.value = savedPlayer;
+            }
+            const iframe = document.getElementById("stream-iframe");
+            if (iframe && playerSources[savedPlayer]) {
+                iframe.src = playerSources[savedPlayer];
+            }
 
             if (isClockRunning && matchStatus === "LIVE") {
                 startInterval();
