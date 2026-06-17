@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Spain vs Cape Verde Islands | FIFA World Cup Live Stream</title>
+    <title>Portugal vs DR Congo | FIFA World Cup Live Stream</title>
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -15,9 +15,9 @@
             --card-border: rgba(255, 255, 255, 0.08);
             --text-color: #f3f4f6;
             --text-secondary: #9ca3af;
-            --accent-color: #e52c3c; /* Spain Red */
+            --accent-color: #e52c3c; /* Portugal Red */
             --accent-glow: rgba(229, 44, 60, 0.4);
-            --secondary-accent: #2563eb; /* Cape Verde Blue */
+            --secondary-accent: #2563eb; /* DR Congo Blue */
             --secondary-glow: rgba(37, 99, 235, 0.4);
             --success-color: #10b981;
             --font-display: 'Space Grotesk', sans-serif;
@@ -520,6 +520,182 @@
             vertical-align: middle;
             font-weight: bold;
         }
+
+        /* Settings Gear Button */
+        .settings-toggle-btn {
+            position: absolute;
+            top: 12px;
+            right: 12px;
+            background: rgba(255, 255, 255, 0.08);
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            color: var(--text-color);
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-family: var(--font-body);
+            font-size: 0.8rem;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            transition: all 0.2s ease;
+            z-index: 10;
+        }
+
+        .settings-toggle-btn:hover {
+            background: rgba(255, 255, 255, 0.2);
+            color: #fbbf24;
+            border-color: rgba(251, 191, 36, 0.4);
+        }
+
+        /* Settings Drawer Panel */
+        .settings-drawer {
+            display: none;
+            background: rgba(8, 12, 24, 0.98);
+            border: 1px solid var(--card-border);
+            border-radius: 12px;
+            padding: 16px;
+            position: absolute;
+            top: 55px;
+            right: 12px;
+            width: 320px;
+            z-index: 20;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.6);
+            backdrop-filter: blur(20px);
+            text-align: left;
+            animation: slideDown 0.2s ease-out;
+        }
+
+        @keyframes slideDown {
+            from { transform: translateY(-10px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+
+        .settings-drawer-header {
+            margin-bottom: 12px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+            padding-bottom: 8px;
+        }
+
+        .settings-drawer-header h4 {
+            font-family: var(--font-display);
+            font-size: 0.95rem;
+            color: #fbbf24;
+        }
+
+        .settings-help {
+            font-size: 0.75rem;
+            color: var(--text-secondary);
+            display: block;
+            margin-top: 2px;
+        }
+
+        .settings-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 12px;
+        }
+
+        .setting-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .setting-item label {
+            font-size: 0.8rem;
+            font-weight: 600;
+            color: var(--text-color);
+        }
+
+        .adjust-control {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .adjust-btn {
+            background: rgba(255, 255, 255, 0.08);
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            color: var(--text-color);
+            width: 32px;
+            height: 28px;
+            border-radius: 6px;
+            font-size: 0.85rem;
+            font-weight: 700;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s ease;
+        }
+
+        .adjust-btn:hover {
+            background: rgba(255, 255, 255, 0.2);
+            color: #fbbf24;
+        }
+
+        .settings-value {
+            font-family: var(--font-display);
+            font-size: 1.1rem;
+            font-weight: 700;
+            width: 24px;
+            text-align: center;
+        }
+
+        .settings-input {
+            width: 50px;
+            background: rgba(0, 0, 0, 0.4);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            color: var(--text-color);
+            padding: 4px;
+            border-radius: 4px;
+            text-align: center;
+            font-family: var(--font-display);
+            font-weight: 700;
+            font-size: 0.9rem;
+            -moz-appearance: textfield;
+        }
+
+        .settings-input::-webkit-outer-spin-button,
+        .settings-input::-webkit-inner-spin-button {
+            -webkit-appearance: none;
+            margin: 0;
+        }
+
+        .settings-select {
+            background: rgba(0, 0, 0, 0.4);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            color: var(--text-color);
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-family: var(--font-body);
+            font-size: 0.8rem;
+            outline: none;
+            cursor: pointer;
+        }
+
+        .status-btn {
+            width: auto;
+            padding: 0 10px;
+            font-size: 0.75rem;
+        }
+
+        .close-settings-btn {
+            background: #10b981;
+            border: none;
+            color: white;
+            padding: 6px 16px;
+            border-radius: 6px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        .close-settings-btn:hover {
+            background: #059669;
+        }
     </style>
 </head>
 <body>
@@ -529,7 +705,7 @@
         <!-- Header -->
         <header class="header-bar">
             <div class="tournament-badge">
-                🏆 <span>FIFA WORLD CUP GROUP STAGE</span>
+                🏆 <span>FIFA WORLD CUP GROUP STAGE (GROUP K)</span>
             </div>
             <div class="live-badge" style="display: none;">
                 <span class="live-dot"></span>
@@ -537,20 +713,95 @@
             </div>
         </header>
 
-        <!-- Matchup Board with Live Scoreboard Widget (Method 2) -->
-        <div class="matchup-card" style="padding: 0; overflow: hidden; border: none; background: transparent; height: 320px; box-shadow: none;">
-            <iframe src="https://widgets.sofascore.com/embed/unique-event?id=30879516" style="width:100%; height:320px; border:none; border-radius:16px; background: rgba(13, 20, 38, 0.85);" scrolling="no" loading="lazy"></iframe>
+        <!-- Matchup Board with Live Custom Scoreboard Widget -->
+        <div class="matchup-card" id="scoreboard-card" style="position: relative;">
+            
+            <!-- Settings Toggle Button (Gear icon) -->
+            <button class="settings-toggle-btn" onclick="toggleSettings()" title="Sync Scoreboard with Live Stream">
+                ⚙️ Settings
+            </button>
+
+            <!-- Settings Drawer (Sync Control Panel) -->
+            <div id="settings-drawer" class="settings-drawer">
+                <div class="settings-drawer-header">
+                    <h4>Stream Sync Settings</h4>
+                    <span class="settings-help">Delay or adjust the scoreboard to align with your stream delay.</span>
+                </div>
+                <div class="settings-grid">
+                    <!-- Score Control -->
+                    <div class="setting-item">
+                        <label>Portugal Goals</label>
+                        <div class="adjust-control">
+                            <button class="adjust-btn" onclick="adjustGoals('home', -1)">-</button>
+                            <span id="settings-score-home" class="settings-value">0</span>
+                            <button class="adjust-btn" onclick="adjustGoals('home', 1)">+</button>
+                        </div>
+                    </div>
+                    <div class="setting-item">
+                        <label>DR Congo Goals</label>
+                        <div class="adjust-control">
+                            <button class="adjust-btn" onclick="adjustGoals('away', -1)">-</button>
+                            <span id="settings-score-away" class="settings-value">0</span>
+                            <button class="adjust-btn" onclick="adjustGoals('away', 1)">+</button>
+                        </div>
+                    </div>
+                    <!-- Clock Control -->
+                    <div class="setting-item">
+                        <label>Match Clock (Min)</label>
+                        <div class="adjust-control">
+                            <button class="adjust-btn" onclick="adjustTime(-1)">-1m</button>
+                            <input type="number" id="settings-time-input" class="settings-input" value="0" min="0" max="120" onchange="setTimeFromInput(this.value)">
+                            <button class="adjust-btn" onclick="adjustTime(1)">+1m</button>
+                        </div>
+                    </div>
+                    <!-- Status & Play/Pause -->
+                    <div class="setting-item">
+                        <label>Status / Timer</label>
+                        <div class="adjust-control">
+                            <button id="clock-play-btn" class="adjust-btn status-btn" onclick="toggleClockRunning()">Pause</button>
+                            <select id="settings-status-select" class="settings-select" onchange="setStatus(this.value)">
+                                <option value="LIVE">Live</option>
+                                <option value="HT">Half Time</option>
+                                <option value="FT">Full Time</option>
+                                <option value="UPCOMING">Upcoming</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div style="margin-top: 15px; text-align: right;">
+                    <button class="close-settings-btn" onclick="toggleSettings()">Done</button>
+                </div>
+            </div>
+
+            <!-- Scoreboard Display -->
+            <div class="teams-row">
+                <div class="team home">
+                    <span class="team-flag">🇵🇹</span>
+                    <span class="team-name">Portugal</span>
+                </div>
+                <div class="vs-divider">
+                    <div class="score-container">
+                        <div class="score-box" id="score-home">0</div>
+                        <div class="score-separator">:</div>
+                        <div class="score-box" id="score-away">0</div>
+                    </div>
+                    <div class="match-clock" id="match-clock-display" onclick="toggleSettings()" title="Click to sync match time">00:00</div>
+                    <div class="match-time-status" id="match-status-display">
+                        <span class="live-dot" id="live-dot-indicator"></span>
+                        <span id="status-text">LIVE</span>
+                    </div>
+                </div>
+                <div class="team away">
+                    <span class="team-flag">🇨🇩</span>
+                    <span class="team-name">DR Congo</span>
+                </div>
+            </div>
         </div>
 
         <!-- Video Player -->
         <main class="stream-section">
             <div class="video-wrapper">
-                <iframe 
-                    src="https://embed.st/embed/admin/ppv-spain-vs-cape-verde/1" 
-                    frameborder="0" 
-                    allow="autoplay; encrypted-media; accelerometer; clipboard-write; gyroscope; picture-in-picture" 
-                    allowfullscreen>
-                </iframe>
+                <iframe src="https://ntv.cx/embed?t=U3kvVGsxU1RSbFNVNzYraHQ0eDVFWktGeGVzQkNwSHdpdVRML1F2aWtWTG9xWmtIMHdldGFoYXhTYk5YNFVzdHoySW1vQ1ozV0JQa0x1UUx0VnRhQWc9PQ~~" width="100%" height="450" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
             </div>
         </main>
 
@@ -567,19 +818,19 @@
                 <div class="info-grid">
                     <div class="info-item">
                         <div class="info-label">Stadium</div>
-                        <div class="info-value">Mercedes-Benz Stadium, Atlanta</div>
+                        <div class="info-value">Houston Stadium, Houston</div>
                     </div>
                     <div class="info-item">
                         <div class="info-label">Group</div>
-                        <div class="info-value">Group H</div>
+                        <div class="info-value">Group K</div>
                     </div>
                     <div class="info-item">
                         <div class="info-label">Weather</div>
-                        <div class="info-value">24°C, Indoor Arena</div>
+                        <div class="info-value">26°C, Retractable Roof</div>
                     </div>
                     <div class="info-item">
                         <div class="info-label">Possession</div>
-                        <div class="info-value" id="stats-possession">Spain 50% - 50% CPV</div>
+                        <div class="info-value" id="stats-possession">Portugal 62% - 38% DRC</div>
                     </div>
                 </div>
             </div>
@@ -588,35 +839,35 @@
             <div id="lineups" class="tab-content">
                 <div class="lineup-container">
                     <div class="lineup-team home">
-                        <h3>🇪🇸 Spain (4-3-3)</h3>
+                        <h3>🇵🇹 Portugal (4-3-3)</h3>
                         <ul class="player-list">
-                            <li class="player-item"><span><span class="player-number">1</span>Unai Simón</span><span>GK</span></li>
-                            <li class="player-item"><span><span class="player-number">2</span>Dani Carvajal</span><span>DF</span></li>
-                            <li class="player-item"><span><span class="player-number">3</span>Robin Le Normand</span><span>DF</span></li>
-                            <li class="player-item"><span><span class="player-number">14</span>Aymeric Laporte</span><span>DF</span></li>
-                            <li class="player-item"><span><span class="player-number">24</span>Marc Cucurella</span><span>DF</span></li>
-                            <li class="player-item"><span><span class="player-number">16</span>Rodri</span><span>MF</span></li>
-                            <li class="player-item"><span><span class="player-number">8</span>Fabián Ruiz</span><span>MF</span></li>
-                            <li class="player-item"><span><span class="player-number">10</span>Dani Olmo</span><span>MF</span></li>
-                            <li class="player-item"><span><span class="player-number">19</span>Lamine Yamal</span><span>FW</span></li>
-                            <li class="player-item"><span><span class="player-number">17</span>Nico Williams</span><span>FW</span></li>
-                            <li class="player-item"><span><span class="player-number">7</span>Álvaro Morata</span><span>FW</span></li>
+                            <li class="player-item"><span><span class="player-number">1</span>Diogo Costa</span><span>GK</span></li>
+                            <li class="player-item"><span><span class="player-number">20</span>João Cancelo</span><span>DF</span></li>
+                            <li class="player-item"><span><span class="player-number">4</span>Rúben Dias</span><span>DF</span></li>
+                            <li class="player-item"><span><span class="player-number">14</span>Gonçalo Inácio</span><span>DF</span></li>
+                            <li class="player-item"><span><span class="player-number">19</span>Nuno Mendes</span><span>DF</span></li>
+                            <li class="player-item"><span><span class="player-number">6</span>João Palhinha</span><span>MF</span></li>
+                            <li class="player-item"><span><span class="player-number">23</span>Vitinha</span><span>MF</span></li>
+                            <li class="player-item"><span><span class="player-number">8</span>Bruno Fernandes</span><span>MF</span></li>
+                            <li class="player-item"><span><span class="player-number">10</span>Bernardo Silva</span><span>FW</span></li>
+                            <li class="player-item"><span><span class="player-number">7</span>Cristiano Ronaldo (C)</span><span>FW</span></li>
+                            <li class="player-item"><span><span class="player-number">17</span>Rafael Leão</span><span>FW</span></li>
                         </ul>
                     </div>
                     <div class="lineup-team away">
-                        <h3>🇨🇻 Cape Verde (4-3-3)</h3>
+                        <h3>🇨🇩 DR Congo (4-5-1)</h3>
                         <ul class="player-list">
-                            <li class="player-item"><span><span class="player-number">1</span>Vozinha</span><span>GK</span></li>
-                            <li class="player-item"><span><span class="player-number">2</span>Steven Moreira</span><span>DF</span></li>
-                            <li class="player-item"><span><span class="player-number">4</span>Roberto Lopes</span><span>DF</span></li>
-                            <li class="player-item"><span><span class="player-number">5</span>Logan Costa</span><span>DF</span></li>
-                            <li class="player-item"><span><span class="player-number">3</span>João Paulo</span><span>DF</span></li>
-                            <li class="player-item"><span><span class="player-number">10</span>Jamiro Monteiro</span><span>MF</span></li>
-                            <li class="player-item"><span><span class="player-number">8</span>Kevin Pina</span><span>MF</span></li>
-                            <li class="player-item"><span><span class="player-number">15</span>Deroy Duarte</span><span>MF</span></li>
-                            <li class="player-item"><span><span class="player-number">20</span>Ryan Mendes</span><span>FW</span></li>
-                            <li class="player-item"><span><span class="player-number">11</span>Bebé</span><span>FW</span></li>
-                            <li class="player-item"><span><span class="player-number">7</span>Jovane Cabral</span><span>FW</span></li>
+                            <li class="player-item"><span><span class="player-number">1</span>Lionel Mpasi</span><span>GK</span></li>
+                            <li class="player-item"><span><span class="player-number">2</span>Aaron Wan-Bissaka</span><span>DF</span></li>
+                            <li class="player-item"><span><span class="player-number">22</span>Chancel Mbemba (C)</span><span>DF</span></li>
+                            <li class="player-item"><span><span class="player-number">4</span>Axel Tuanzebe</span><span>DF</span></li>
+                            <li class="player-item"><span><span class="player-number">26</span>Arthur Masuaku</span><span>DF</span></li>
+                            <li class="player-item"><span><span class="player-number">10</span>Théo Bongonda</span><span>MF</span></li>
+                            <li class="player-item"><span><span class="player-number">8</span>Samuel Moutoussamy</span><span>MF</span></li>
+                            <li class="player-item"><span><span class="player-number">18</span>Noah Sadiki</span><span>MF</span></li>
+                            <li class="player-item"><span><span class="player-number">6</span>Ngal'ayel Mukau</span><span>MF</span></li>
+                            <li class="player-item"><span><span class="player-number">11</span>Nathanaël Mbuku</span><span>MF</span></li>
+                            <li class="player-item"><span><span class="player-number">20</span>Yoane Wissa</span><span>FW</span></li>
                         </ul>
                     </div>
                 </div>
@@ -634,11 +885,12 @@
     </div>
 
     <footer class="site-footer">
-        <p>© 2026 World Cup Live Hub. All rights reserved. <span class="version-badge">Build v1.4.1 (Numeric Widget)</span></p>
+        <p>© 2026 World Cup Live Hub. All rights reserved. <span class="version-badge">Build v1.5.0 (Stream Sync Control)</span></p>
     </footer>
 
-    <!-- Tab Switching Logic -->
+    <!-- Scripts -->
     <script>
+        // Tab Switching Logic
         function openTab(evt, tabId) {
             const tabContents = document.getElementsByClassName("tab-content");
             for (let i = 0; i < tabContents.length; i++) {
@@ -653,6 +905,188 @@
             document.getElementById(tabId).classList.add("active");
             evt.currentTarget.classList.add("active");
         }
+
+        // --- Custom Scoreboard & Stream Sync State ---
+        let matchSeconds = 0;
+        let isClockRunning = true;
+        let clockInterval = null;
+        let lastSavedTime = Date.now();
+        let homeScore = 0;
+        let awayScore = 0;
+        let matchStatus = "LIVE";
+
+        // DOM elements
+        let scoreHomeEl, scoreAwayEl, settingsHomeEl, settingsAwayEl;
+        let clockDisplayEl, timeInputEl, statusDisplayEl, liveDotEl, statusSelectEl, playBtnEl;
+
+        // Load State from LocalStorage
+        function loadState() {
+            // Bind DOM elements
+            scoreHomeEl = document.getElementById("score-home");
+            scoreAwayEl = document.getElementById("score-away");
+            settingsHomeEl = document.getElementById("settings-score-home");
+            settingsAwayEl = document.getElementById("settings-score-away");
+            clockDisplayEl = document.getElementById("match-clock-display");
+            timeInputEl = document.getElementById("settings-time-input");
+            statusDisplayEl = document.getElementById("status-text");
+            liveDotEl = document.getElementById("live-dot-indicator");
+            statusSelectEl = document.getElementById("settings-status-select");
+            playBtnEl = document.getElementById("clock-play-btn");
+
+            homeScore = parseInt(localStorage.getItem("scoreboard_homeScore")) || 0;
+            awayScore = parseInt(localStorage.getItem("scoreboard_awayScore")) || 0;
+            matchSeconds = parseInt(localStorage.getItem("scoreboard_matchSeconds")) || 0;
+            matchStatus = localStorage.getItem("scoreboard_matchStatus") || "LIVE";
+            isClockRunning = localStorage.getItem("scoreboard_isClockRunning") !== "false"; // default true
+            
+            // Adjust running clock for elapsed time since last reload
+            if (isClockRunning && matchStatus === "LIVE") {
+                lastSavedTime = parseInt(localStorage.getItem("scoreboard_lastSavedTime")) || Date.now();
+                const elapsedMs = Date.now() - lastSavedTime;
+                matchSeconds += Math.floor(elapsedMs / 1000);
+            }
+
+            updateScoreDisplay();
+            updateClockDisplay();
+            updateStatusDisplay();
+
+            // Setup input forms
+            timeInputEl.value = Math.floor(matchSeconds / 60);
+            statusSelectEl.value = matchStatus;
+            playBtnEl.textContent = isClockRunning ? "Pause" : "Play";
+
+            if (isClockRunning && matchStatus === "LIVE") {
+                startInterval();
+            }
+        }
+
+        // Save State to LocalStorage
+        function saveState() {
+            localStorage.setItem("scoreboard_homeScore", homeScore);
+            localStorage.setItem("scoreboard_awayScore", awayScore);
+            localStorage.setItem("scoreboard_matchSeconds", matchSeconds);
+            localStorage.setItem("scoreboard_matchStatus", matchStatus);
+            localStorage.setItem("scoreboard_isClockRunning", isClockRunning);
+            localStorage.setItem("scoreboard_lastSavedTime", Date.now());
+        }
+
+        // Score Controls
+        function adjustGoals(team, diff) {
+            if (team === 'home') {
+                homeScore = Math.max(0, homeScore + diff);
+            } else if (team === 'away') {
+                awayScore = Math.max(0, awayScore + diff);
+            }
+            updateScoreDisplay();
+            saveState();
+
+            // Trigger visual flash on update
+            const scoreBox = document.getElementById(`score-${team}`);
+            scoreBox.classList.add("goal-flash");
+            setTimeout(() => {
+                scoreBox.classList.remove("goal-flash");
+            }, 1000);
+        }
+
+        // Settings Modal Toggle
+        function toggleSettings() {
+            const drawer = document.getElementById("settings-drawer");
+            if (drawer.style.display === "block") {
+                drawer.style.display = "none";
+            } else {
+                drawer.style.display = "block";
+                // Update settings form with current state
+                timeInputEl.value = Math.floor(matchSeconds / 60);
+                settingsHomeEl.textContent = homeScore;
+                settingsAwayEl.textContent = awayScore;
+            }
+        }
+
+        // Clock logic
+        function startInterval() {
+            if (clockInterval) clearInterval(clockInterval);
+            clockInterval = setInterval(() => {
+                matchSeconds++;
+                updateClockDisplay();
+                
+                // Save state periodically to prevent state loss on refresh
+                localStorage.setItem("scoreboard_matchSeconds", matchSeconds);
+                localStorage.setItem("scoreboard_lastSavedTime", Date.now());
+            }, 1000);
+        }
+
+        function stopInterval() {
+            if (clockInterval) {
+                clearInterval(clockInterval);
+                clockInterval = null;
+            }
+        }
+
+        function updateClockDisplay() {
+            const mins = Math.floor(matchSeconds / 60);
+            const secs = matchSeconds % 60;
+            const minsStr = mins.toString().padStart(2, '0');
+            const secsStr = secs.toString().padStart(2, '0');
+            if(clockDisplayEl) clockDisplayEl.textContent = `${minsStr}:${secsStr}`;
+        }
+
+        function setTimeFromInput(minVal) {
+            const mins = Math.max(0, parseInt(minVal) || 0);
+            matchSeconds = mins * 60;
+            updateClockDisplay();
+            saveState();
+        }
+
+        function adjustTime(diffMins) {
+            matchSeconds = Math.max(0, matchSeconds + (diffMins * 60));
+            if(timeInputEl) timeInputEl.value = Math.floor(matchSeconds / 60);
+            updateClockDisplay();
+            saveState();
+        }
+
+        function toggleClockRunning() {
+            isClockRunning = !isClockRunning;
+            if (isClockRunning && matchStatus === "LIVE") {
+                startInterval();
+                if(playBtnEl) playBtnEl.textContent = "Pause";
+            } else {
+                stopInterval();
+                if(playBtnEl) playBtnEl.textContent = "Play";
+            }
+            saveState();
+        }
+
+        function setStatus(statusVal) {
+            matchStatus = statusVal;
+            updateStatusDisplay();
+            
+            if (matchStatus !== "LIVE") {
+                stopInterval();
+                isClockRunning = false;
+                if(playBtnEl) playBtnEl.textContent = "Play";
+            } else {
+                isClockRunning = true;
+                if(playBtnEl) playBtnEl.textContent = "Pause";
+                startInterval();
+            }
+            saveState();
+        }
+
+        function updateStatusDisplay() {
+            if(statusDisplayEl) statusDisplayEl.textContent = matchStatus;
+            if (statusDisplayEl) {
+                if (matchStatus === "LIVE") {
+                    liveDotEl.style.display = "inline-block";
+                } else {
+                    liveDotEl.style.display = "none";
+                }
+            }
+        }
+
+        // Initialize state on load
+        window.addEventListener("DOMContentLoaded", () => {
+            loadState();
+        });
     </script>
 </body>
 </html>
